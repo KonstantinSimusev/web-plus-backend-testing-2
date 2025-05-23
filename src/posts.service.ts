@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
 export interface Post {
   id: string;
@@ -17,7 +17,7 @@ export class PostsService {
   private posts: Post[] = [];
   private lastPostId = 1;
 
-  create(post: Omit<Post, 'id' | 'date'>) {
+  create(post: Omit<Post, "id" | "date">) {
     const postWithId: Post = {
       ...post,
       id: this.lastPostId.toString(),
@@ -34,12 +34,12 @@ export class PostsService {
     let foundPosts = this.posts;
 
     // Stryker disable next-line ConditionalExpression: The "true" mutant results in an equivalent mutant
-    if (skip !== undefined) {
+    if (skip !== undefined && skip >= 0 && !isNaN(skip)) {
       foundPosts = foundPosts.slice(skip);
     }
 
     // Stryker disable next-line ConditionalExpression: The "true" mutant results in an equivalent mutant
-    if (limit !== undefined) {
+    if (limit !== undefined && limit > 0 && !isNaN(limit)) {
       foundPosts = foundPosts.slice(0, limit);
     }
 
@@ -54,11 +54,11 @@ export class PostsService {
     this.posts = this.posts.filter(({ id }) => id !== postId);
   }
 
-  update(postId: string, post: Pick<Post, 'text'>) {
+  update(postId: string, post: Pick<Post, "text">) {
     const postToUpdate = this.find(postId);
 
     if (!postToUpdate) {
-      throw new Error('Пост не найден');
+      throw new Error("Пост не найден");
     }
 
     Object.assign(postToUpdate, post);
